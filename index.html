@@ -21,9 +21,7 @@
     color:#eee;
   }
   body.dark.eco{ --glow-r1:6px; --glow-r2:14px; }
-
   .stage{position:relative;width:100%;height:100%;}
-
   .msg{
     position:absolute;left:50%;top:50%;
     padding:10px 16px;border-radius:16px;
@@ -37,7 +35,6 @@
     will-change: transform, opacity;
     background: var(--bg);
   }
-
   /* 第一阶段动画（散开→回收→定型） */
   @keyframes flight{
     0%{ opacity:0; transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) scale(.75) rotate(var(--rot)); }
@@ -47,7 +44,6 @@
     88%{ transform:translate(-50%,-50%) translate(calc(var(--heart-x)*.6),calc(var(--heart-y)*.6)) scale(.9) rotate(var(--heart-rot)); }
     100%{ opacity:1; transform:translate(-50%,-50%) translate(var(--heart-x),var(--heart-y)) scale(1) rotate(var(--heart-rot)); }
   }
-
   /* 心瓣伪元素 */
   .msg::before,.msg::after{
     content:''; position:absolute; left:50%; top:0;
@@ -59,19 +55,16 @@
   .msg.heart-mode{ color:#fff; }
   .msg .text{ position:relative; z-index:1; }
   .msg.heart-mode::before,.msg.heart-mode::after{ opacity:1; }
-
   .msg.locked{ animation:none; transform:translate(-50%,-50%) translate(var(--heart-x),var(--heart-y)) scale(1) rotate(var(--heart-rot)); opacity:1; }
   .msg.locked.pulse{ animation:pulse 2.2s ease-in-out 1; }
   /* 锁定后减负：隐藏瓣形伪元素，移除辉光并减轻文字阴影 */
   .msg.locked::before,.msg.locked::after{ display:none; }
   body.dark .msg.locked{ filter:none; }
   .msg.locked .text{ text-shadow:0 1px 2px rgba(0,0,0,.12); }
-
   @keyframes pulse{
     0%,100%{ transform:translate(-50%,-50%) translate(var(--heart-x),var(--heart-y)) scale(1); }
     50%   { transform:translate(-50%,-50%) translate(var(--heart-x),var(--heart-y)) scale(1.08); }
   }
-
   /* 爆炸阶段（保留以备将来使用） */
   .msg.burst{ animation: burst 1.4s cubic-bezier(.17,.6,.2,1) forwards; }
   @keyframes burst{
@@ -79,7 +72,6 @@
     70%{ opacity:.9; transform:translate(-50%,-50%) translate(calc(var(--heart-x) + var(--bx)*0.7), calc(var(--heart-y) + var(--by)*0.7)) scale(.9) rotate(var(--rot)); filter:blur(.3px); }
     100%{ opacity:0; transform:translate(-50%,-50%) translate(calc(var(--heart-x) + var(--bx)), calc(var(--heart-y) + var(--by))) scale(.7) rotate(var(--rot)); filter:blur(1px); }
   }
-
   .center-title{
     position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
     font-weight:800; letter-spacing:.12em; font-size:clamp(18px,4vmin,28px);
@@ -88,25 +80,147 @@
   }
   body.dark .center-title{ color:rgba(255,160,200,.9); text-shadow:0 0 18px rgba(255,130,200,.35); }
   @keyframes titleIn{ from{opacity:0; transform:translate(-50%,-55%);} to{opacity:.95; transform:translate(-50%,-50%);} }
-
-  .controls{ position:absolute; right:18px; bottom:18px; display:flex; gap:12px; align-items:center; }
-  .btn{ padding:10px 14px; border:none; border-radius:10px; background:rgba(255,255,255,.5); backdrop-filter:blur(8px); color:#222; font-weight:600; cursor:pointer; box-shadow:0 5px 20px rgba(0,0,0,.22); }
+  .controls{ 
+    position:absolute; right:18px; bottom:18px; display:none; /* 默认隐藏 */
+    gap:12px; align-items:center; 
+  }
+  .btn{ padding:10px 14px; border:none; border-radius:10px; background:rgba(255,255,255,.5); backdrop-filter:blur(8px); color:#222; font-weight:600; cursor:pointer; box-shadow:0 5px 20px rgba(0,0,0,.22); font-size:clamp(14px,2.5vmin,18px); transition:all 0.3s; }
   body.dark .btn{ background:rgba(255,255,255,.15); color:#fff; }
-
+  /* 弹窗确定按钮样式（与3.html保持一致） */
+  .btn.primary {
+    background-color: #ff6b6b;
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  }
+  .btn.primary:hover {
+    background-color: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+  }
+  .btn.primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
+  }
+  body.dark .btn.primary {
+    background-color: #ff6b6b;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+  }
+  body.dark .btn.primary:hover {
+    background-color: #ff5252;
+    box-shadow: 0 6px 16px rgba(255, 107, 107, 0.6);
+  }
   /* 雪花 */
   .snow{ position:fixed; top:-10px; color:white; user-select:none; pointer-events:none; z-index:99; text-shadow:0 0 8px rgba(255,255,255,.8); animation:snowfall linear forwards; }
   @keyframes snowfall{ 0%{ transform:translateY(0) rotate(0deg); opacity:1;} 100%{ transform:translateY(100vh) rotate(360deg); opacity:0;} }
+  /* 新增弹窗相关CSS */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .modal-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal {
+    background-color: #ffffff;
+    padding: 0 0 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+  }
+  body.dark .modal {
+    background-color: #2a2a2a;
+  }
+  body.dark .title {
+    color: #f0f0f0;
+  }
+  body.dark .content {
+    color: #ccc;
+  }
+  .modal-backdrop.active .modal {
+    transform: scale(1);
+  }
+  .titlebar {
+    width: 100%;
+    margin: 0 0 15px;
+    padding: 10px 0;
+    background-color: #fff0f0;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+  }
+  .icon {
+    font-size: 30px;
+    display: inline-block;
+    margin-bottom: 8px;
+    animation: bounce 1.5s infinite;
+  }
+  .title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #333;
+  }
+  .content {
+    font-size: 16px;
+    color: #666;
+    margin: 0 40px 25px;
+    line-height: 1.6;
+  }
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin: 0 40px 5px;
+  }
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 </style>
 </head>
 <body>
   <div class="stage" id="stage">
     <div class="center-title" id="title">for you ♥</div>
   </div>
+  <!-- 新增弹窗HTML结构 -->
+  <div class="modal-backdrop" id="start-backdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="titlebar">
+        <span class="icon">❤️</span>
+        <span class="title" id="modal-title">礼物</span>
+      </div>
+      <div class="content">您有一份礼物，确定要打开吗？</div>
+      <div class="actions">
+        <button class="btn primary" id="confirm-btn" autofocus>确定</button>
+      </div>
+    </div>
+  </div>
   <div class="controls">
     <button class="btn" id="themeBtn">切换主题</button>
     <button class="btn" id="replay">重放 / 切换背景</button>
   </div>
-
+  <!-- 新增音乐播放标签 -->
+  <audio id="bgMusic" preload="auto">
+    <source src="https://lf9-music-east.douyinstatic.com/obj/ies-music-hj/7495920705440140091.mp3" type="audio/mpeg">
+  </audio>
 <script>
 /* 你喜欢的句子 */
 const tips=[
@@ -120,11 +234,12 @@ const tips=[
   '想靠近你一点','你的名字是我心事','心软是因为你','想牵你的手看日落',
   '每次想你星星都亮了','心跳藏不住','有你世界亮一点','甜在风里也在心里'
 ];
-
 const stage  = document.getElementById('stage');
 const replay = document.getElementById('replay');
 const title  = document.getElementById('title');
 const themeBtn = document.getElementById('themeBtn');
+const controls = document.querySelector('.controls');
+const bgMusic = document.getElementById('bgMusic'); // 获取音乐元素
 let dark = false;       // 深色模式
 let eco = false;        // 省电档
 let snowRunning = false;
@@ -133,7 +248,6 @@ let snowIntervalMs = 700; // 雪花生成间隔
 let snowMax = 120;        // 最大雪花数量
 let totalCurrent = 0;     // 当前生成粒子总数
 let lockedCount = 0;      // 已锁定数量
-
 /* 外抛方向 */
 const directions = [
   {dx:'0vw',dy:'-80vh'},{dx:'0vw',dy:'80vh'},
@@ -143,7 +257,18 @@ const directions = [
   {dx:'0vw',dy:'-60vh'},{dx:'0vw',dy:'60vh'},
   {dx:'-60vw',dy:'0vh'},{dx:'60vw',dy:'0vh'}
 ];
-
+// 音乐播放函数：每次播放从头开始，仅播放一次
+function playMusic() {
+  bgMusic.currentTime = 0;
+  bgMusic.play().catch(err => {
+    // 处理自动播放限制：引导用户交互后播放
+    const triggerPlay = () => {
+      bgMusic.play();
+      document.body.removeEventListener('click', triggerPlay);
+    };
+    document.body.addEventListener('click', triggerPlay);
+  });
+}
 function rand(min,max){return Math.random()*(max-min)+min;}
 function hexToRgba(hex,alpha=1){
   const h=hex.replace('#','');
@@ -168,7 +293,6 @@ function randomStyle(){
     glow2:hexToRgba(c2,0.35)
   };
 }
-
 /* 心形参数方程 + 自适应 */
 function heartScale(){
   const minDim = Math.min(window.innerWidth, window.innerHeight);
@@ -188,11 +312,9 @@ function heartXY(t){
   const y = -s * (13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
   return {x: x+'px', y: (y + centerYOffset())+'px'};
 }
-
 function createMsg(i,total){
   const el = document.createElement('div');
   el.className = 'msg';
-
   const d = directions[Math.floor(Math.random()*directions.length)];
   el.style.setProperty('--dx', d.dx);
   el.style.setProperty('--dy', d.dy);
@@ -204,28 +326,23 @@ function createMsg(i,total){
   el.style.setProperty('--bg', sty.bg);
   el.style.setProperty('--glow1', sty.glow1);
   el.style.setProperty('--glow2', sty.glow2);
-
   const t = (i / total) * Math.PI * 2; // 均匀映射心形
   const {x,y} = heartXY(t);
   el.style.setProperty('--heart-x', x);
   el.style.setProperty('--heart-y', y);
   el.style.setProperty('--heart-rot', rand(-18,18)+'deg');
-
   const span = document.createElement('span');
   span.className = 'text';
   span.textContent = tips[Math.floor(Math.random()*tips.length)];
   el.appendChild(span);
-
   const delay = parseFloat(el.style.getPropertyValue('--delay'));
   const dur   = parseFloat(el.style.getPropertyValue('--dur'));
   const switchAt = delay + dur * 0.86;
   const switchTimer = setTimeout(()=>{ el.classList.add('heart-mode'); }, switchAt*1000);
-
   el.addEventListener('animationend',()=>{
     clearTimeout(switchTimer);
     el.classList.add('heart-mode','locked','pulse');
     el.style.willChange = 'auto';
-
     // 预计算爆炸向量（保留接口）
     const spread = rand(140, 260);
     const ang    = rand(0, Math.PI*2);
@@ -233,14 +350,11 @@ function createMsg(i,total){
     const by = Math.sin(ang)*spread;
     el.style.setProperty('--bx', bx+'px');
     el.style.setProperty('--by', by+'px');
-
     lockedCount++;
     if(lockedCount===totalCurrent) onAllLocked();
   }, {once:true});
-
   stage.appendChild(el);
 }
-
 /* 触发最终爆炸（当前关闭自动触发） */
 function finalBurst(){
   stage.querySelectorAll('.msg.locked').forEach(el=>{
@@ -250,12 +364,10 @@ function finalBurst(){
     el.addEventListener('animationend',()=> el.remove(), {once:true});
   });
 }
-
 /* 播放全流程 */
 function play(){
   stage.querySelectorAll('.msg').forEach(n=>n.remove());
   title.style.opacity = 0;
-
   const minDim = Math.min(window.innerWidth, window.innerHeight);
   let TOTAL;
   if (minDim <= 420) {
@@ -268,13 +380,10 @@ function play(){
   totalCurrent = TOTAL;
   lockedCount = 0;
   for(let i=0;i<TOTAL;i++) createMsg(i,TOTAL);
-
   setTimeout(()=>{ title.style.opacity = 1; }, 1400);
-
   // const TOTAL_TIME_MS = (8.6 + 0.35 + 0.3 + 2.2) * 1000;
   // setTimeout(finalBurst, TOTAL_TIME_MS);
 }
-
 /* 雪花模块 */
 function createSnow(){
   const snow=document.createElement('div');
@@ -302,7 +411,6 @@ function loopSnow(ts){
 }
 function startSnow(){ snowRunning=true; lastSnowTime=0; loopSnow(); }
 function stopSnow(){ snowRunning=false; cancelAnimationFrame(snowFrame); document.querySelectorAll('.snow').forEach(s=>s.remove()); }
-
 /* 模式与省电判断 */
 function decideEco(){
   const cores = navigator.hardwareConcurrency || 4;
@@ -324,7 +432,6 @@ function applyMode(){
     document.body.classList.remove('eco');
   }
 }
-
 function onAllLocked(){
   // 锁定后资源释放，再提升一点雪花密度
   if(dark){
@@ -332,15 +439,44 @@ function onAllLocked(){
     snowMax = eco ? 140 : 240;
   }
 }
-
 /* 事件 */
-play();
-replay.onclick = ()=>{ dark = !dark; applyMode(); play(); };
-themeBtn.onclick = ()=>{ window.location.href = ''; };
+document.addEventListener('DOMContentLoaded', () => {
+  // 显示弹窗
+  const startBackdrop = document.getElementById('start-backdrop');
+  startBackdrop.classList.add('active');
+  
+  // 确认按钮点击后：隐藏弹窗+显示控制按钮+应用模式+播放动画+播放音乐
+  document.getElementById('confirm-btn').addEventListener('click', () => {
+    startBackdrop.classList.remove('active');
+    controls.style.display = 'flex';
+    applyMode();
+    play();
+    playMusic(); // 点击确定后播放一次音乐
+  });
+  
+  // 重播按钮：切换模式+播放动画+再次播放音乐
+  replay.onclick = ()=>{
+    dark = !dark;
+    applyMode();
+    play();
+    playMusic();
+  };
+  
+  // 切换主题按钮：跳转+再次播放音乐
+  themeBtn.onclick = ()=>{
+    playMusic();
+    window.location.href = 'https://sctre.github.io/home/';
+  };
+});
 
+// 调整窗口大小事件：仅在控制按钮显示时触发
 let resizeTimer;
-window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer = setTimeout(()=> play(), 150); });
+window.addEventListener('resize', ()=>{
+  if (controls.style.display === 'flex') {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(()=> play(), 150);
+  }
+});
 </script>
 </body>
 </html>
-
