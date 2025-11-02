@@ -580,14 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 });
 
-// 调整窗口大小事件：仅在控制按钮显示时触发
-let resizeTimer;
-window.addEventListener('resize', ()=>{
-  if (controls.style.display === 'flex') {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(()=> play(), 150);
-  }
-});
+// 移除窗口resize事件监听，防止全屏切换时动画重播
 </script>
 </body>
 </html>
