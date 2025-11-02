@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 <title>💖</title>
 <style>
+  /* 全局文字不可选 */
+  * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
   :root{ --glow-r1:10px; --glow-r2:22px; }
   html,body{
     height:100%;margin:0;overflow:hidden;
@@ -121,8 +129,10 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.7);
   }
   
-  /* 弹窗确定按钮样式（与3.html保持一致） */
+  /* 弹窗确定按钮样式（与便签.html保持一致） */
   .btn.primary {
+    padding: 7px 12px; /* 减小内边距 */
+    font-size: 14px; /* 减小字体大小 */
     background-color: #ff6b6b;
     color: white;
     box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
@@ -150,7 +160,7 @@
   /* 雪花 */
   .snow{ position:fixed; top:-10px; color:white; user-select:none; pointer-events:none; z-index:99; text-shadow:0 0 8px rgba(255,255,255,.8); animation:snowfall linear forwards; }
   @keyframes snowfall{ 0%{ transform:translateY(0) rotate(0deg); opacity:1;} 100%{ transform:translateY(100vh) rotate(360deg); opacity:0;} }
-  /* 新增弹窗相关CSS */
+  /* 修改后的弹窗相关CSS（与便签.html保持一致） */
   .modal-backdrop {
     position: fixed;
     top: 0;
@@ -172,11 +182,11 @@
   }
   .modal {
     background-color: #ffffff;
-    padding: 0 0 20px;
+    padding: 0 0 15px;
     border-radius: 12px;
     text-align: center;
     width: 90%;
-    max-width: 450px;
+    max-width: 380px; /* 收窄弹窗宽度 */
     transform: scale(0.9);
     transition: transform 0.3s ease;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -196,33 +206,33 @@
   }
   .titlebar {
     width: 100%;
-    margin: 0 0 15px;
-    padding: 10px 0;
+    margin: 0 0 10px;
+    padding: 8px 0;
     background-color: #fff0f0;
     border-radius: 12px 12px 0 0;
     text-align: center;
   }
   .icon {
-    font-size: 30px;
+    font-size: 26px;
     display: inline-block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     animation: bounce 1.5s infinite;
   }
   .title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
     color: #333;
   }
   .content {
-    font-size: 16px;
+    font-size: 15px;
     color: #666;
-    margin: 0 40px 25px;
-    line-height: 1.6;
+    margin: 0 25px 18px; /* 减小左右边距 */
+    line-height: 1.5;
   }
   .actions {
     display: flex;
     justify-content: center;
-    margin: 0 40px 5px;
+    margin: 0 25px 5px; /* 减小左右边距 */
   }
   @keyframes bounce {
     0%, 100% {
@@ -232,27 +242,27 @@
       transform: translateY(-10px);
     }
   }
-  /* 新增底部标识样式 - 调整高度 */
+  /* 修改后的底部标识样式（与便签.html保持一致） */
   .footer {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 0px 0px; /* 减少上下内边距以降低高度 */
+    padding: 0px 0px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.2); /* 增加背景不透明度 */
     backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(0, 0, 0, 0.2); /* 加深边框 */
     z-index: 1000;
     font-size: 12px;
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.9); /* 增加文字对比度 */
     display: none; /* 初始隐藏 */
   }
 
   body.dark .footer {
-    background: rgba(0, 0, 0, 0.2);
-    color: rgba(255, 255, 255, 0.7);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2); /* 增加背景不透明度 */
+    color: rgba(255, 255, 255, 0.9); /* 增加文字对比度 */
+    border-top: 1px solid rgba(255, 255, 255, 0.3); /* 加深边框 */
   }
 
   .footer-line {
@@ -264,6 +274,7 @@
     color: inherit;
     text-decoration: none;
     transition: opacity 0.3s;
+    font-weight: 600; /* 增加字体粗细 */
   }
 
   .footer a:hover {
@@ -281,7 +292,7 @@
   <div class="stage" id="stage">
     <div class="center-title" id="title">for you ♥</div>
   </div>
-  <!-- 新增弹窗HTML结构 -->
+  <!-- 修改后的弹窗HTML结构（与便签.html保持一致） -->
   <div class="modal-backdrop" id="start-backdrop">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="titlebar">
@@ -296,13 +307,13 @@
   </div>
   <div class="controls">
     <button class="btn" id="themeBtn">切换主题</button>
-    <button class="btn" id="replay">重放 / 切换背景</button>
+    <button class="btn" id="replay">重播 / 切换背景</button>
   </div>
 
-  <!-- 新增底部标识 -->
+  <!-- 修改后的底部标识 -->
   <footer class="footer" id="page-footer">
     <div class="footer-line">
-      Designed & Maintained by <a href="https://www.iesdouyin.com/share/user/MS4wLjABAAAA_ml9jDiT3gM8tu-K2JI-aUTF_xXL-F1U3CZl8s-cacs?from_ssr=1&from_aid=1128&u_code=1812j8mm8&did=MS4wLjABAAAAM19p3TGg3tlW38m0298oTlqbe7ympZBhyKBaxPRLjDQC6FyrnQ704Xqnc4qkOjx3&iid=MS4wLjABAAAArV-2zhoTsdqmONHYY-4xE60GT5jbBwPd9VIWD4wRvjseh_7xaclnGYlMMg1YxPXn&with_sec_did=1&sec_uid=MS4wLjABAAAA_ml9jDiT3gM8tu-K2JI-aUTF_xXL-F1U3CZl8s-cacs&timestamp=1762044343&utm_source=copy&utm_campaign=client_share&utm_medium=android&app=aweme&activity_info=%7B%22social_author_id%22%3A%22105715923899%22%2C%22social_share_id%22%3A%22105715923899_1762044340812%22%2C%22social_share_time%22%3A%221762044343%22%2C%22social_share_user_id%22%3A%22105715923899%22%7D" target="_blank" rel="noopener noreferrer">啊啵呲嘚</a>
+      Designed & Maintained by <a href="https://www.douyin.com/user/MS4wLjABAAAA_ml9jDiT3gM8tu-K2JI-aUTF_xXL-F1U3CZl8s-cacs?showTab=post" target="_blank" rel="noopener noreferrer">啊啵呲嘚</a>
     </div>
     <div class="footer-line">
       <a href="https://github.com/SCTRE" target="_blank" rel="noopener noreferrer">
